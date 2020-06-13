@@ -1,32 +1,36 @@
 version: '3.3'
 services:
-  aranda_web:
-    image: herlesinc/odoo10ce:1.0
-    container_name: aranda_web_10
-    hostname: aranda_web_10
-    depends_on:
-      - aranda_db
+  odoo13_web:
+    image: odoo:latest
+    container_name: odoo13_web
+    hostname: odoo13_web
+    #depends_on:
+      #- odoo13_db
     ports:
-      - "9069:8069"
-      - "9068:7068"
+      - "8069:8069"
+      - "7068:7068"
+    #environment:
+      #- HOST=odoo13_db
+      #- USER=odoo
+      #- PASSWORD=odoo
     volumes:
       - ./addons:/mnt/extra-addons/
       - ./odoo.conf:/etc/odoo/odoo.conf
       - ./autostart.sh:/mnt/extra-addons/autostart.sh
-      - odoo-web-data:/var/lib/odoo
+      - odoo-web-data:/var/lib/odoo/odoo13
     restart: always
     stdin_open: true
     tty: true
     command: "/mnt/extra-addons/autostart.sh"
-  aranda_db:
-    image: postgres:10
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_USER=odoo
-      - PGDATA=/var/lib/postgresql/data/pgdata
-    volumes:
-      - odoo-db-data:/var/lib/postgresql/data/pgdata
+  #odoo13_db:
+    #image: postgres:10
+    #environment:
+      #- POSTGRES_DB=postgres
+      #- POSTGRES_PASSWORD=odoo
+      #- POSTGRES_USER=odoo
+      #- PGDATA=/var/lib/postgresql/data/pgdata
+    #volumes:
+      #- odoo-db-data:/var/lib/postgresql/data/pgdata/odoo13
 volumes:
   odoo-web-data:
-  odoo-db-data:
+  #odoo-db-data:
