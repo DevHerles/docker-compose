@@ -49,7 +49,7 @@ Push image to dockerhub
 ## Description
 For make(save) a copy
 ```bash
-# docker save odoo10ce:2.0 > odoo10ce.2.0.tar
+# docker save herlesinc/odoo10ce:2.0 > odoo10ce.2.0.tar
 ```
 
 For restore(load) a copy

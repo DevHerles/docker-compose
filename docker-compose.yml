@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   aranda_web:
-    image: herlesinc/odoo10ce:1.0
+    image: herlesinc/odoo10ce:1.1
     container_name: aranda_web_10
     hostname: aranda_web_10
     depends_on:
