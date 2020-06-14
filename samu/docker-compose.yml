@@ -1,14 +1,14 @@
 version: '3.3'
 services:
-  aranda_web:
+  samu_web:
     image: herlesinc/odoo10ce:1.1
-    container_name: aranda_web_10
-    hostname: aranda_web_10
+    container_name: samu_web_10
+    hostname: samu_web_10
     depends_on:
-      - aranda_db
+      - samu_db
     ports:
-      - "9069:8069"
-      - "9068:7068"
+      - "6069:8069"
+      - "6068:7068"
     volumes:
       - ./addons:/mnt/extra-addons/
       - ./odoo.conf:/etc/odoo/odoo.conf
@@ -18,7 +18,7 @@ services:
     stdin_open: true
     tty: true
     command: "/mnt/extra-addons/autostart.sh"
-  aranda_db:
+  samu_db:
     image: postgres:10
     environment:
       - POSTGRES_DB=postgres

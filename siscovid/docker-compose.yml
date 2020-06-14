@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  siscovid_web:
+    image: herlesinc/odoo10ce:1.1
+    container_name: siscovid_web_10
+    hostname: siscovid_web_10
+    depends_on:
+      - siscovid_db
+    ports:
+      - "9069:8069"
+      - "9068:7068"
+    volumes:
+      - ./addons:/mnt/extra-addons/
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - ./autostart.sh:/mnt/extra-addons/autostart.sh
+      - odoo-web-data:/var/lib/odoo
+    restart: always
+    stdin_open: true
+    tty: true
+    command: "/mnt/extra-addons/autostart.sh"
+  siscovid_db:
+    image: postgres:10
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+volumes:
+  odoo-web-data:
+  odoo-db-data:
