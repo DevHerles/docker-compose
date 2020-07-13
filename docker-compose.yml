@@ -1,18 +1,13 @@
 version: '3.3'
 services:
-  odoo13_web:
+  web:
     image: odoo:latest
     container_name: odoo13_web
+    domainname: odoo13_web.local
     hostname: odoo13_web
-    #depends_on:
-      #- odoo13_db
-    ports:
-      - "8069:8069"
-      - "7068:7068"
-    #environment:
-      #- HOST=odoo13_db
-      #- USER=odoo
-      #- PASSWORD=odoo
+    networks:
+      net:
+        ipv4_address: 10.11.0.10
     volumes:
       - ./addons:/mnt/extra-addons/
       - ./odoo.conf:/etc/odoo/odoo.conf
@@ -22,15 +17,12 @@ services:
     stdin_open: true
     tty: true
     command: "/mnt/extra-addons/autostart.sh"
-  #odoo13_db:
-    #image: postgres:10
-    #environment:
-      #- POSTGRES_DB=postgres
-      #- POSTGRES_PASSWORD=odoo
-      #- POSTGRES_USER=odoo
-      #- PGDATA=/var/lib/postgresql/data/pgdata
-    #volumes:
-      #- odoo-db-data:/var/lib/postgresql/data/pgdata/odoo13
 volumes:
   odoo-web-data:
-  #odoo-db-data:
+networks:
+  net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.11.0.0/24
