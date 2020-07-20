@@ -1,0 +1,83 @@
+version: '3.3'
+services:
+  odoo10_web:
+    image: herlesinc/odoo10ce:1.1
+    container_name: odoo10_web
+    hostname: odoo10_web
+    depends_on:
+      - postgres10_odoo
+    ports:
+      - "6069:8069"
+      - "6068:7068"
+    volumes:
+      - ./addons:/mnt/extra-addons/
+      - ./odoo.conf:/etc/odoo/odoo.conf
+      - ./autostart.sh:/mnt/extra-addons/autostart.sh
+      - odoo10-web-data:/var/lib/odoo
+    restart: always
+    stdin_open: true
+    tty: true
+    command: "/mnt/extra-addons/autostart.sh"
+  postgres10_odoo:
+    image: postgres:10
+    container_name: postgres10_odoo
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres10-odoo-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+  sentry:
+    image: sentry
+    container_name: sentry
+    env_file:
+      - .env
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
+      - redis
+    tty: true
+    stdin_open: true
+  sentry_cron:
+    image: sentry
+    container_name: sentry_cron
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+  sentry_worker:
+    image: sentry
+    container_name: sentry_worker
+    command: run worker
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis
+    container_name: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+  db:
+    image: postgres
+    container_name: postgres10_sentry
+    environment:
+      POSTGRES_USER: sentry
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - postgres10-sentry-data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+volumes:
+  odoo10-web-data:
+  redis-data:
+  postgres10-odoo-data:
+  postgres10-sentry-data:

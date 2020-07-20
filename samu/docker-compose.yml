@@ -1,11 +1,12 @@
 version: '3.3'
 services:
-  samu_web:
+  web:
     image: herlesinc/odoo10ce:1.1
     container_name: samu_web_10
     hostname: samu_web_10
-    depends_on:
-      - samu_db
+    networks:
+      net:
+        ipv4_address: 10.11.3.10
     ports:
       - "6069:8069"
       - "6068:7068"
@@ -18,15 +19,12 @@ services:
     stdin_open: true
     tty: true
     command: "/mnt/extra-addons/autostart.sh"
-  samu_db:
-    image: postgres:10
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_USER=odoo
-      - PGDATA=/var/lib/postgresql/data/pgdata
-    volumes:
-      - odoo-db-data:/var/lib/postgresql/data/pgdata
 volumes:
   odoo-web-data:
-  odoo-db-data:
+networks:
+  net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.11.3.0/24
