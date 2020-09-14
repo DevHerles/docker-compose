@@ -1,13 +1,13 @@
 version: '3.3'
 services:
   web:
-    image: odoo:latest
+    image: herlesinc/odoo13:1.0
     container_name: odoo13_web
     domainname: odoo13_web.local
     hostname: odoo13_web
     networks:
       net:
-        ipv4_address: 10.11.0.10
+        ipv4_address: 11.11.11.11
     volumes:
       - ./addons:/mnt/extra-addons/
       - ./odoo.conf:/etc/odoo/odoo.conf
@@ -25,4 +25,4 @@ networks:
     ipam:
       driver: default
       config:
-        - subnet: 10.11.0.0/24
+        - subnet: 11.11.11.0/24
